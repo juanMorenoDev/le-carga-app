@@ -41,7 +41,25 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text('Le carga'),
         ),
-        drawer: Drawer(),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text(''),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                title: Text('log out'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+            ],
+          ),
+        ),
         body: getBody());
   }
 

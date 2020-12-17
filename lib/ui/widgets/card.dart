@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:le_carga_app/main.dart';
 import 'package:le_carga_app/service/calls_service.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 Widget getCard(person) {
   final CallsAndMessagesService _service = locator<CallsAndMessagesService>();
   var name = person['name']['first'] + ' ' + person['name']['last'];
   var pic = person['picture']['medium'];
-  _launchURL(String phone) async {
-    var url = 'tel: $phone';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
 
   return Card(
       child: Padding(
