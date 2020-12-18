@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:le_carga_app/ui/widgets/card.dart';
 import 'package:http/http.dart' as http;
 
-import 'login_page.dart';
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -29,7 +27,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         users = items;
       });
-      print(items);
     } else {
       setState(() {
         users = [];
@@ -43,25 +40,6 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: const Text('Le carga'),
         ),
-        // drawer: Drawer(
-        //   child: ListView(
-        //     padding: EdgeInsets.zero,
-        //     children: <Widget>[
-        //       DrawerHeader(
-        //         child: Text(''),
-        //         decoration: BoxDecoration(
-        //           color: Colors.blue,
-        //         ),
-        //       ),
-        //       ListTile(
-        //         title: Text('log out'),
-        //         onTap: () {
-        //           Navigator.pushNamed(context, LoginPage.id);
-        //         },
-        //       ),
-        //     ],
-        //   ),
-        // ),
         body: getBody());
   }
 

@@ -14,11 +14,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   List users = [];
   bool isLoading = false;
+  final passwordController = TextEditingController();
+  final emailController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     isLoading = false;
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   login() async {
@@ -32,10 +42,11 @@ class _LoginPageState extends State<LoginPage> {
           HttpHeaders.acceptHeader: 'application/json',
           HttpHeaders.contentTypeHeader: 'application/json',
         },
-        body: jsonEncode(
-            {'username': 'luisgui62@yahoo.com', 'password': 'bnd955hk1919i'}));
+        body: jsonEncode({
+          'username': emailController.text,
+          'password': passwordController.text
+        }));
     var body = json.decode(response.body);
-    print(body);
     if (body['message'] == 'success') {
       setState(() {
         isLoading = false;
@@ -62,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: const InputDecoration(
                       hintText: 'Enter your email', icon: Icon(Icons.email)),
                   keyboardType: TextInputType.emailAddress,
+                  controller: emailController,
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter some text';
@@ -73,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: const InputDecoration(
                       hintText: 'Enter your password', icon: Icon(Icons.lock)),
                   obscureText: true,
+                  controller: passwordController,
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter some text';
