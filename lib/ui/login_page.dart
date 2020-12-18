@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatefulWidget {
+  static String id = 'login_page';
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -15,20 +18,32 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    isLoading = false;
   }
 
   login() async {
-    var url = 'https://lecargaback.herokuapp.com/user';
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      var items = json.decode(response.body)['results'];
+    // var url = 'http://localhost:3000/user/login';// mock backend
+    var url = 'https://lecargaback.herokuapp.com/user/login';
+    setState(() {
+      isLoading = true;
+    });
+    var response = await http.post(url,
+        headers: {
+          HttpHeaders.acceptHeader: 'application/json',
+          HttpHeaders.contentTypeHeader: 'application/json',
+        },
+        body: jsonEncode(
+            {'username': 'luisgui62@yahoo.com', 'password': 'bnd955hk1919i'}));
+    var body = json.decode(response.body);
+    print(body);
+    if (body['message'] == 'success') {
       setState(() {
-        users = items;
+        isLoading = false;
       });
-      print(items);
+      Navigator.pushNamed(context, '/list');
     } else {
       setState(() {
-        users = [];
+        isLoading = false;
       });
     }
   }
@@ -42,12 +57,11 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(40.0),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: 'Enter your email',
-                  ),
+                      hintText: 'Enter your email', icon: Icon(Icons.email)),
+                  keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter some text';
@@ -57,8 +71,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: 'Enter your password',
-                  ),
+                      hintText: 'Enter your password', icon: Icon(Icons.lock)),
+                  obscureText: true,
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Please enter some text';
@@ -66,9 +80,20 @@ class _LoginPageState extends State<LoginPage> {
                     return null;
                   },
                 ),
+                SizedBox(height: 20),
                 RaisedButton(
-                    child: Text("Log in"),
-                    onPressed: () => Navigator.pushNamed(context, '/list'))
+                    child: Text(
+                      "Iniciar sesion",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () => this.login(),
+                    color: Colors.blue),
+                Visibility(
+                    visible: this.isLoading,
+                    child: SpinKitChasingDots(
+                      color: Colors.blue,
+                      size: 50.0,
+                    ))
               ]),
         ),
       ),
