@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     isLoading = false;
-    token = '';
   }
 
   @override
@@ -54,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
     if (body['message'] == 'success') {
       setState(() {
         isLoading = false;
-        token = response.headers['lecarga'];
       });
+      print(token);
       Navigator.push(
         context,
         MaterialPageRoute(
