@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'home_page.dart';
+
 class LoginPage extends StatefulWidget {
   static String id = 'login_page';
   @override
@@ -14,6 +16,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   List users = [];
   bool isLoading = false;
+  String token = '';
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
 
@@ -21,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     isLoading = false;
+    token = '';
   }
 
   @override
@@ -32,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   login() async {
-    // var url = 'http://localhost:3000/user/login';// mock backend
+    // var url = 'http://localhost:3000/user/login'; // mock backend
     var url = 'https://lecargaback.herokuapp.com/user/login';
     setState(() {
       isLoading = true;
@@ -50,8 +54,14 @@ class _LoginPageState extends State<LoginPage> {
     if (body['message'] == 'success') {
       setState(() {
         isLoading = false;
+        token = response.headers['lecarga'];
       });
-      Navigator.pushNamed(context, '/list');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(token: token),
+        ),
+      );
     } else {
       setState(() {
         isLoading = false;
