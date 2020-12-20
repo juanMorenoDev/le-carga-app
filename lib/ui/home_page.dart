@@ -24,10 +24,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   fetchUsers() async {
-    var url = 'https://randomuser.me/api/?results=20';
-    var response = await http.get(url, headers: {'lecarga': 'widget.token'});
+    // var url = 'http://localhost:3000/user/login'; // mock backend
+    var url = 'https://lecargaback.herokuapp.com/person';
+    var response = await http.get(url, headers: {'lecarga': this.token});
     if (response.statusCode == 200) {
-      var items = json.decode(response.body)['results'];
+      var items = json.decode(response.body);
+      print(items);
       setState(() {
         users = items;
       });
@@ -52,6 +54,7 @@ class _HomePageState extends State<HomePage> {
       itemCount: users.length,
       itemBuilder: (contex, index) {
         return getCard(users[index]);
+        // return Text('mock');
       },
     );
   }

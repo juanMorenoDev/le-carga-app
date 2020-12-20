@@ -4,8 +4,16 @@ import 'package:le_carga_app/service/calls_service.dart';
 
 Widget getCard(person) {
   final CallsAndMessagesService _service = locator<CallsAndMessagesService>();
-  var name = person['name']['first'] + ' ' + person['name']['last'];
-  var pic = person['picture']['medium'];
+  var name = person['name'];
+  var pic = 'assets/truck-icon.jpg';
+  _getElements(List<dynamic> data) {
+    String result = '';
+    for (var i = 0; i < data.length; i++) {
+      if (i > 0) result += ',';
+      result += data[i];
+    }
+    return result;
+  }
 
   return Card(
       child: Padding(
@@ -19,8 +27,8 @@ Widget getCard(person) {
             height: 60,
             decoration: BoxDecoration(
                 color: Colors.blueGrey,
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: NetworkImage(pic))),
+                image:
+                    DecorationImage(fit: BoxFit.cover, image: AssetImage(pic))),
           ),
           SizedBox(width: 20),
           Column(
@@ -31,7 +39,7 @@ Widget getCard(person) {
                 height: 5,
               ),
               Text(
-                person['location']['city'],
+                _getElements(person['city']),
                 style: TextStyle(fontSize: 10),
               ),
               Text(
@@ -39,7 +47,7 @@ Widget getCard(person) {
                 style: TextStyle(fontSize: 10),
               ),
               Text(
-                person['email'],
+                _getElements(person['carType']),
                 style: TextStyle(fontSize: 10),
               )
             ],
